@@ -1,0 +1,35 @@
+.jumbotron {
+	background-color: #cdddf7;
+}
+
+.panel-info> .panel-heading {
+	color: white;
+}
+
+.panel-success> .panel-heading {
+	color: white;
+}
+
+table {
+	width: 100%;
+}
+
+table tr:nth-child(even) {
+    background-color: #eee;
+}
+table tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+tr {
+	width: 100%;
+}
+
+.row {
+	width: 100%;
+}
+
+.dark {
+	font-weight: bold;
+}
+
