@@ -1,5 +1,25 @@
+/* The animation code */
+@keyframes toggle {
+    from {background-color: #a3b4d1;}
+    to {background-color: #bcd8c6;}
+}
+
+/* The element to apply the animation to */
 .jumbotron {
-	background-color: #cdddf7;
+    
+    background-color: #a3b4d1;
+    animation-name: toggle;
+    animation-duration: 4s;
+    animation-delay: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+
+	
+.jumbotron h1 {
+	font-family: 'Stardos Stencil', cursive;
+	font-weight: 200;
 }
 
 .panel-info> .panel-heading {

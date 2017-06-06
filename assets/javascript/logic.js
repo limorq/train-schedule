@@ -14,22 +14,28 @@ var train = {
 //train array
 var trains = [];
 
+
 function populateSchedule () {
 
-	for (var i=0; i<trains.length; i++) {	
+		//update row counter
+		curIx++;
+
 		var table = document.getElementById("trainLine");
-		var row = table.insertRow(1);
+
+		//create and insert a row and cells
+		var row = table.insertRow(curIx);
 	    var c1 = row.insertCell(0);
 	    var c2 = row.insertCell(1);
 	    var c3 = row.insertCell(2);
 	    var c4 = row.insertCell(3);
 	    var c5 = row.insertCell(4);
-	    c1.innerHTML = trains[i].name;
-	    c2.innerHTML = trains[i].destination;
-	    c3.innerHTML = trains[i].frequency;
-	    c4.innerHTML = trains[i].nerowtArrival;
-	    c5.innerHTML = trains[i].minToArrival;
-	}
+	    c1.innerHTML = train.name;
+	    c2.innerHTML = train.destination;
+	    c3.innerHTML = train.frequency;
+	    c4.innerHTML = train.nextArrival;
+	    c5.innerHTML = train.minToArrival;
+
+	   
 }
 
 $("#addTrain").click(function(event) {
@@ -41,24 +47,31 @@ $("#addTrain").click(function(event) {
 	train.destination = $("#destin").val().trim();
 	train.frequency = $("#freq").val().trim();
 	train.nextArrival = $("#trainTime").val().trim();
-	trains.push(train);
-
-
+	
 	//display on viewport
 	populateSchedule();
 });
+
 
 $("#removeTrain").click(function(event) {
 
 	event.preventDefault();
 
 	//retrieve train name from form
-	var trainToRemove = $("trainName").val().trim();
+	var trainToRemove = $("#trainName").val().trim();
 
-		//loop thru the trains array to find the item to remove
-		var ix = trains.indexOf(trainToRemove);
-		if (ix != -1) {
-			trains.splice(ix, 1);
-			populateSchedule();
-		}
+	//grab all td elements in the schedule table
+	var tds = document.querySelectorAll("td");
+
+	//iterate over each td
+	for (var i = 0; i < tds.length; i++) {
+	  var text = tds[i].innerText;
+	  console.log(text);
+	  //check for your target text and delete is a match
+	  if (text.toLowerCase() === trainToRemove.toLowerCase()) {
+	  	document.getElementById("trainLine").deleteRow(curIx);
+	  	curIx--;
+	  }
+	}
+		
 });
