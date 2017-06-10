@@ -6,75 +6,70 @@
     projectId: "train-schedule-40838",
     storageBucket: "train-schedule-40838.appspot.com",
     messagingSenderId: "557654430431"
-  };
-
+};
   firebase.initializeApp(config);
 
-//global variables
-var curRow = 0;
+//global variables & functions
 var database = firebase.database();
+var intervalId;
 
+function update(snap) {
 
-//global train object
-var train = {
-	name: null,
-	destination: null,
-	frequency: null,
-	nextArrival: null,
-	minToArrival: null
 }
 
-//train array
-var trains = [];
-
-
-function populateSchedule () {
-
-	//retrieve data from firebase
-	database.ref().on("value", function(snapshot){
-
-		//update row counter
-		curRow++;
-
-		var table = document.getElementById("trainLine");
-
-		//create and insert a row and cells
-		var row = table.insertRow(curRow);
-	    var c1 = row.insertCell(0);
-	    var c2 = row.insertCell(1);
-	    var c3 = row.insertCell(2);
-	    var c4 = row.insertCell(3);
-	    var c5 = row.insertCell(4);
-	    c1.innerHTML = snapshot.val().tName;
-	    c2.innerHTML = snapshot.val().destin;
-	    c3.innerHTML = snapshot.val().freq;
-	    c4.innerHTML = snapshot.val().arrival;
-	    //c5.innerHTML = train.minToArrival;
-
-	 });  
-}
-
-$("#addTrain").click(function(event) {
+//click event for add train button
+$("#addTrain").on("click", function(event) {
 
 	event.preventDefault();
 
 	//retrieve info from form
-	train.name = $("#trainName").val().trim();
-	train.destination = $("#destin").val().trim();
-	train.frequency = $("#freq").val().trim();
-	train.nextArrival = $("#trainTime").val().trim();
+	var name = $("#trainName").val().trim();
+	var destin = $("#destin").val().trim();
+	var freq = $("#freq").val().trim();
+	var time = $("#trainTime").val().trim();
 
-	//set database values
-	database.ref().set({
-		tName: train.name,
-		destin: train.destination,
-		freq: train.frequency,
-		arrival: train.nextArrival
-	});
-	
-	//display on viewport
-	populateSchedule();
+	//create local object to hold train info
+	var train = {
+		trainName: name,
+		desitnation: destin,
+		frequency: freq,
+		arrivalTime: time
+	}
+
+	//push train object to firebase
+	database.ref().push(train);
+
+	//clear text boxes
+	$("#trainName").val("");
+	$("#destin").val("");
+	$("#trainTime").val("");
+	$("#freq").val("");
 });
+
+database.ref().on("child_added", function(childSnapshot, prevChildKey){
+	
+	//store everything into a variable
+	var name = childSnapshot.val().trainName;
+	var destin = childSnapshot.val().desitnation;
+	var freq = childSnapshot.val().frequency;
+	var time = childSnapshot.val().arrivalTime;
+
+	//calculate minutes-to & arrival time
+	var minTo = moment().diff(moment(time), "minutes");
+	//var remainder = diffTime % freq;
+	//var minTo = freq - remainder;
+	var nextTrain = moment().add(minTo, "minutes");
+	var prettyTimeToNext = moment(nextTrain).format("hh:mm a");
+
+	//add data to table
+	$("#trainLine > tbody").append("<tr id = '" + prevChildKey + "><td>" + name + "</td><td>" + destin + "</td><td>" + freq + "</td><td>" + prettyTimeToNext + "</td><td>" + minTo + "</td></tr>");
+
+		//set up interval to update schedule every minute
+		intervalId = setInterval(function () {			
+			update(childSnapshot);			
+		}, 6000);
+});
+
 
 
 $("#removeTrain").click(function(event) {
@@ -84,20 +79,14 @@ $("#removeTrain").click(function(event) {
 	//retrieve train name from form
 	var trainToRemove = $("#trainName").val().trim();
 
-	//grab all td elements in the schedule table
-	var trs = document.querySelectorAll("tr");
+	//clear text box
+	$("#trainName").val("");
 
-		//iterate over each td
-		for (var i = 0; i < trs.length; i++) {
-		  var text = trs[i].innerText.trim();
-		  console.log(trs[i]);
-		  console.log(text);
-		  console.log(trainToRemove);
-		  //check for your target text and delete is a match
-		  if (text.toLowerCase() === trainToRemove.toLowerCase()) {
-		  	document.getElementById("trainLine").deleteRow(i);
-		  	curRow--;
-		  }
+	//remove reference from database
+	for (var i=0; i<0; i++) {
+		if (trainToRemove === database.ref().child(i).trainName) {
+			database.ref().child(trainName).remove();
 		}
+	}
 		
 });

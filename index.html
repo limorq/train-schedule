@@ -22,14 +22,19 @@
 	<div class = "panel panel-info">
 		<div class = "panel-heading">Current Train Schedule</div>
 		<div class = "panel-body">
-			<table id = "trainLine">
-				<tr>
-					<th>Train Name</th>
-					<th>Destination</th>
-					<th>Frequency</th>
-					<th>Arrival Time</th>
-					<th>Minutes to Arrival</th>
-				</tr>
+			<table class = "table" id = "trainLine">
+                <thead>
+    				<tr>
+    					<th>Train Name</th>
+    					<th>Destination</th>
+    					<th>Frequency</th>
+    					<th>Arrival Time</th>
+    					<th>Minutes to Arrival</th>
+    				</tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
 			</table>
 				
 			
@@ -65,8 +70,10 @@
 
 	</div><!--closes container-->
 
-	<script src="assets/javascript/logic.js"></script>
-
+	
+    <script src="assets/javascript/logic.js"></script>
+    
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
 </body>
 </html>
 
