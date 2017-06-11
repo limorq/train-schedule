@@ -13,9 +13,6 @@
 var database = firebase.database();
 var intervalId;
 
-function update(snap) {
-
-}
 
 //click event for add train button
 $("#addTrain").on("click", function(event) {
@@ -54,20 +51,18 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey){
 	var freq = childSnapshot.val().frequency;
 	var time = childSnapshot.val().arrivalTime;
 
+
+
 	//calculate minutes-to & arrival time
-	var minTo = moment().diff(moment(time), "minutes");
-	//var remainder = diffTime % freq;
-	//var minTo = freq - remainder;
+	var diffTime = moment().diff(moment(time), "minutes");
+	var remainder = diffTime % freq;
+	var minTo = freq - remainder;
 	var nextTrain = moment().add(minTo, "minutes");
 	var prettyTimeToNext = moment(nextTrain).format("hh:mm a");
 
 	//add data to table
-	$("#trainLine > tbody").append("<tr id = '" + prevChildKey + "><td>" + name + "</td><td>" + destin + "</td><td>" + freq + "</td><td>" + prettyTimeToNext + "</td><td>" + minTo + "</td></tr>");
+	$("#trainLine > tbody").append("<tr id = '" + prevChildKey + "''><td>" + name + "</td><td>" + destin + "</td><td>" + freq + "</td><td>" + prettyTimeToNext + "</td><td>" + minTo + "</td></tr>");
 
-		//set up interval to update schedule every minute
-		intervalId = setInterval(function () {			
-			update(childSnapshot);			
-		}, 6000);
 });
 
 
@@ -82,11 +77,19 @@ $("#removeTrain").click(function(event) {
 	//clear text box
 	$("#trainName").val("");
 
-	//remove reference from database
-	for (var i=0; i<0; i++) {
-		if (trainToRemove === database.ref().child(i).trainName) {
-			database.ref().child(trainName).remove();
-		}
-	}
-		
+	var query = firebase.database().ref().orderByKey();
+	query.once("value")
+  		.then(function(snapshot) {
+    		snapshot.forEach(function(childSnapshot) {
+
+      			//get value of train name from database
+      			var key = childSnapshot;    			
+     		 	var childData = childSnapshot.child("trainName").val();
+
+     		 	if (trainToRemove===childData) {
+     		 		childSnapshot.child().remove();
+     		 	}
+    
+  });
+});
 });
