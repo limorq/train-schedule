@@ -12,6 +12,9 @@
 //global variables & functions
 var database = firebase.database();
 var intervalId;
+var trainToRemove;
+var rowKey;
+var trainRow = 0;
 
 
 //click event for add train button
@@ -43,7 +46,7 @@ $("#addTrain").on("click", function(event) {
 	$("#freq").val("");
 });
 
-database.ref().on("child_added", function(childSnapshot, prevChildKey){
+database.ref().on("child_added", function(childSnapshot){
 	
 	//store everything into a variable
 	var name = childSnapshot.val().trainName;
@@ -59,9 +62,10 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey){
 	var minTo = freq - remainder;
 	var nextTrain = moment().add(minTo, "minutes");
 	var prettyTimeToNext = moment(nextTrain).format("hh:mm a");
+	trainRow++;
 
-	//add data to table
-	$("#trainLine > tbody").append("<tr id = '" + prevChildKey + "''><td>" + name + "</td><td>" + destin + "</td><td>" + freq + "</td><td>" + prettyTimeToNext + "</td><td>" + minTo + "</td></tr>");
+	//add row to table
+	$("#trainLine > tbody").append("<tr id = '" + name + "''><td>" + name + "</td><td>" + destin + "</td><td>" + freq + "</td><td>" + prettyTimeToNext + "</td><td>" + minTo + "</td></tr>");
 
 });
 
@@ -72,24 +76,37 @@ $("#removeTrain").click(function(event) {
 	event.preventDefault();
 
 	//retrieve train name from form
-	var trainToRemove = $("#trainName").val().trim();
+	trainToRemove = $("#trainName").val().trim();
 
 	//clear text box
 	$("#trainName").val("");
-
+	var ix = 1;
 	var query = firebase.database().ref().orderByKey();
 	query.once("value")
   		.then(function(snapshot) {
     		snapshot.forEach(function(childSnapshot) {
 
       			//get value of train name from database
-      			var key = childSnapshot;    			
+      			rowKey = childSnapshot.key;    			
      		 	var childData = childSnapshot.child("trainName").val();
-
+     		 	
+console.log(trainToRemove);
+console.log(childData);
      		 	if (trainToRemove===childData) {
-     		 		childSnapshot.child().remove();
+     		 		//remove child from firebase
+     		 		database.ref(rowKey).remove();
+     		 		//remove train from schedule
+
+     		 		document.getElementById("trainLine").deleteRow(ix);
      		 	}
-    
+     		 	else {
+     		 		ix++;
+     		 		console.log(ix);
+     		 	}
   });
 });
 });
+
+
+
+
