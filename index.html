@@ -12,67 +12,55 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
 <body>
-	<!--heading-->
 	<div class="container">
         <div class="jumbotron">
             <h1> Train Scheduler </h1>
         </div>
-
-	<!--panel that displays train info-->
 	<div class = "panel panel-info">
 		<div class = "panel-heading">Current Train Schedule</div>
 		<div class = "panel-body">
 			<table class = "table" id = "trainLine">
-                <thead>
-    				<tr>
-    					<th>Train Name</th>
-    					<th>Destination</th>
-    					<th>Frequency (minutes)</th>
-    					<th>Arrival Time</th>
-    					<th>Minutes to Arrival</th>
-    				</tr>
-                </thead>
-                <tbody>
-                    
-                </tbody>
+				<thead>
+						<tr>
+							<th>Train Name</th>
+							<th>Destination</th>
+							<th>Frequency (minutes)</th>
+							<th>Arrival Time</th>
+							<th>Minutes to Arrival</th>
+						</tr>
+				</thead>
+				<tbody>      
+				</tbody>
 			</table>
-				
-			
 		</div>
-	</div><!--closes panel-->
-
-	<!--panel that holds form to add trains-->
+	</div>
 	<div class = "panel panel-success">
 		<div class = "panel-heading">Add/Remove Train</div>
 		<div class = "panel-body">
 			<form>
-				 <div class="form-group">
-                    <label class="" for="trainName">Train Name:   (to remove a train, input only the train's name) </label>
-                    <input type="text" class="form-control" id="trainName">
-                </div>
-                <div class="form-group">
-                    <label class="" for="destination">Destination: </label>
-                    <input type="text" class="form-control" id="destin">
-                </div>
-                <div class="form-group">
-                    <label class="" for="trainTime">First Train Time (24hr format): </label>
-                    <input type="text" class="form-control" id="trainTime">
-                </div>
-                <div class="form-group">
-                    <label class="" for="frequency">Frequency (minutes): </label>
-                    <input type="text" class="form-control" id="freq">
-                </div>
-                <button type="submit" class="btn btn-success" id="addTrain">Add Train</button>
-                <button type="button" class="btn btn-primary" id="removeTrain">Remove Train</button>
-            </form>
+			<div class="form-group">
+			    <label class="" for="trainName">Train Name:   (to remove a train, input only the train's name) </label>
+			    <input type="text" class="form-control" id="trainName">
+			</div>
+                	<div class="form-group">
+			    <label class="" for="destination">Destination: </label>
+			    <input type="text" class="form-control" id="destin">
+			</div>
+				<div class="form-group">
+			    <label class="" for="trainTime">First Train Time (24hr format): </label>
+			    <input type="text" class="form-control" id="trainTime">
+			</div>
+			<div class="form-group">
+			    <label class="" for="frequency">Frequency (minutes): </label>
+			    <input type="text" class="form-control" id="freq">
+			</div>
+			<button type="submit" class="btn btn-success" id="addTrain">Add Train</button>
+			<button type="button" class="btn btn-primary" id="removeTrain">Remove Train</button>
+		    </form>
 		</div>
-	</div><!--closes panel-->
-
-	</div><!--closes container-->
-
-	
+	</div>
+	</div>
     <script src="assets/javascript/logic.js"></script>
-    
     <script src = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
 </body>
 </html>
